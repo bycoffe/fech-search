@@ -8,11 +8,11 @@ Electronic filing searches are normally done through a [form on the FEC's websit
 
 Because the Fech-Search plugin calls the require method for Fech, you need only require 'fech-search' to use both:
 
-  require 'fech-search'
+    require 'fech-search'
 
 Begin searching for filings by creating a Fech::Search object with the desired parameters. For example:
 
-  >> Fech::Search.new(:committee_id => "C00410118")
+    >> Fech::Search.new(:committee_id => "C00410118")
 
 The following search parameters are available:
 
@@ -29,47 +29,47 @@ Any number of these parameters may be used, with one exception: :form_type canno
 
 A list of filings matching the search parameters may then be a accessed with Search#results:
 
-  >> search = Fech::Search.new(:committee_id => "C00410118")
-  >> results = search.results
+    >> search = Fech::Search.new(:committee_id => "C00410118")
+    >> results = search.results
 
 Each SearchResult object includes basic data about the filing:
   
-  >> results[0]
-  #<Fech::SearchResult:0x000001028a59f0
-   @amended_by=nil,
-   @committee_id="C00410118",
-   @committee_name="BACHMANN FOR CONGRESS",
-   @date_filed=#<Date: 2013-05-29 (4912883/2,0,2299161)>,
-   @date_format="%m/%d/%Y",
-   @description="YEAR-END",
-   @filing_id="872805",
-   @form_type="F3A",
-   @period=
+    >> results[0]
+    #<Fech::SearchResult:0x000001028a59f0
+    @amended_by=nil,
+    @committee_id="C00410118",
+    @committee_name="BACHMANN FOR CONGRESS",
+    @date_filed=#<Date: 2013-05-29 (4912883/2,0,2299161)>,
+    @date_format="%m/%d/%Y",
+    @description="YEAR-END",
+    @filing_id="872805",
+    @form_type="F3A",
+    @period=
     {:from=>%<8b0f7347Date: 2012-11-27 (4912517/2,0,2299161)>,
      :to=>#<Date: 2012-12-31 (4912585/2,0,2299161)>}>
 
 To access the Fech::Filing object for a search result, just call SearchResult#filing:
 
-  >> filing = results[0].filing
-  #<Fech::Filing:0x00000101777e58
-   @csv_parser=Fech::Csv,
-   @customized=false,
-   @download_dir="/var/folders/Sz/SzmbeiAqFvqD8BYScDKkGE+++TI/-Tmp-",
-   @encoding="iso-8859-1:utf-8",
-   @filing_id="872805",
-   @quote_char="\"",
-   @resaved=false,
-   @translator=
-    #<Fech::Translator:0x00000101777bd8
-     @aliases=[],
-     @cache={},
-     @translations=[]>>
+    >> filing = results[0].filing
+    #<Fech::Filing:0x00000101777e58
+    @csv_parser=Fech::Csv,
+    @customized=false,
+    @download_dir="/var/folders/Sz/SzmbeiAqFvqD8BYScDKkGE+++TI/-Tmp-",
+    @encoding="iso-8859-1:utf-8",
+    @filing_id="872805",
+    @quote_char="\"",
+    @resaved=false,
+    @translator=
+      #<Fech::Translator:0x00000101777bd8
+       @aliases=[],
+       @cache={},
+       @translations=[]>>
 
 You now have access to the same filing object and methods as if you had created it directly through [Fech](http://nytimes.github.io/Fech/).
 
 To initialize the filing with parameters, pass them as arguments to the SearchResult#filing method:
   
-  >> filing = results[0].filing(:csv_parser => Fech::CsvDoctor)
+    >> filing = results[0].filing(:csv_parser => Fech::CsvDoctor)
 
 See the [Fech documentation](http://nytimes.github.io/Fech/) for more on initialization options.
 
