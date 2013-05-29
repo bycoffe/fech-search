@@ -25,7 +25,10 @@ The following search parameters are available:
 - :date
 - :form_type
   
-Any number of these parameters may be used, with one exception: :form_type cannot be used by itself; another parameter must be used with it.
+Any number of these parameters may be used. However, the FEC's search functionality has some limitations:
+
+- All other parameters are ignored when :committee_id is used.
+- :form_type cannot be used by itself; another parameter must be used with it.
 
 A list of filings matching the search parameters may then be a accessed with Search#results:
 
