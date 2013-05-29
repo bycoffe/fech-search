@@ -1,4 +1,4 @@
-# Fech::Search
+# Fech-Search
 
 Fech-Search is a plugin for [Fech](http://nytimes.github.io/Fech/) that provides an interface for searching for electronic filings submitted to the Federal Election Commission.
 
