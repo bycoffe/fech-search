@@ -31,6 +31,7 @@ module Fech
     end
 
     def validate_params(params)
+      raise ArgumentError, "At least one search parameter must be given" if params.values.all? { |x| x.empty? }
       nonempty_keys = params.select { |k, v| !v.empty? }.keys
       raise ArgumentError, ":committee_id cannot be used with other search parameters" if nonempty_keys.include?("comid") && nonempty_keys.size > 1
       raise ArgumentError, ":form_type must be used with at least one other search parameter" if nonempty_keys.include?("frmtype") && nonempty_keys.size == 1
