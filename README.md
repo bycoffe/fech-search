@@ -1,8 +1,8 @@
 # Fech-Search
 
-Fech-Search is a plugin for [Fech](http://nytimes.github.io/Fech/) that provides an interface for searching for electronic filings submitted to the Federal Election Commission.
+Fech-Search is a plugin for [Fech](http://nytimes.github.io/Fech/) that adds an interface for searching for electronic filings submitted to the Federal Election Commission. Where Fech provides a way to download and parse filings, Fech-Search provides users with a way to find the filings they're interested in.
 
-Electronic filing searches are normally done through a [form on the FEC's website](http://www.fec.gov/finance/disclosure/efile_search.shtml). Fech-Search is a Ruby wrapper around this form, allowing you to programmatically search for filings.
+Fech-Search is essentially a Ruby wrapper around the [electronic filing search form on the FEC's website](http://www.fec.gov/finance/disclosure/efile_search.shtml).
 
 ## Usage
 
