@@ -9,7 +9,7 @@ module Fech
     # @param [Hash] search_params a hash of parameters to be
     # passed to the search form.
     def initialize(search_params={})
-      @search_params = make_params(search_params)
+      @search_params = validate_params(make_params(search_params))
       @search_url = 'http://query.nictusa.com/cgi-bin/dcdev/forms/'
       @response = search
     end
@@ -28,6 +28,13 @@ module Fech
         'date' => search_params[:date] ? search_params[:date].strftime('%m/%d/%Y') : '',
         'frmtype' => search_params[:form_type] || ''
       }
+    end
+
+    def validate_params(params)
+      nonempty_keys = params.select { |k, v| !v.empty? }.keys
+      raise ArgumentError, ":committee_id cannot be used with other search parameters" if nonempty_keys.include?("comid") && nonempty_keys.size > 1
+      raise ArgumentError, ":form_type must be used with at least one other search parameter" if nonempty_keys.include?("frmtype") && nonempty_keys.size == 1
+      params
     end
 
     # Performs the search of the FEC's electronic filing database.
