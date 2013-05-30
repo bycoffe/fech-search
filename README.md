@@ -6,7 +6,7 @@ Electronic filing searches are normally done through a [form on the FEC's websit
 
 ## Usage
 
-Because the Fech-Search plugin calls the require method for Fech, you need only require 'fech-search' to use both:
+Because Fech-Search requires Fech, you need only require 'fech-search' to use both:
 
     require 'fech-search'
 
