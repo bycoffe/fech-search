@@ -16,14 +16,21 @@ Begin searching for filings by creating a Fech::Search object with the desired p
 
 The following search parameters are available:
 
-- :committee_id (The nine-character committee ID assigned by the FEC)
-- :committee_name
-- :state
-- :party
-- :committee_type ([See a list of committee types](http://www.fec.gov/finance/disclosure/metadata/CommitteeTypeCodes.shtml))
-- :report_type ([See a list of report types](http://www.fec.gov/finance/disclosure/metadata/ReportTypeCodes.shtml))
-- :date
-- :form_type ([See below for a list of form types](#form-types))
+- __:committee_id__ (The nine-character committee ID assigned by the FEC)
+    - examples: "C00499202", "C00130187"
+- __:committee_name__
+    - examples: "Restore Our Future", "Obama for America"
+- __:state__ (Two-character state abbreviation)
+    - examples: "MA", "FL"
+- __:party__ (Three-character party abbreviation)
+    - examples: "REP", "DEM"
+- __:committee_type__ (One-character committee type. [See a list of committee types](http://www.fec.gov/finance/disclosure/metadata/CommitteeTypeCodes.shtml))
+    - examples: "H", "P"
+- __:report_type__ ([See a list of report types](http://www.fec.gov/finance/disclosure/metadata/ReportTypeCodes.shtml))
+    - examples: "M4", "Q1"
+- __:date__ (A Ruby Date object)
+- __:form_type__ ([See below for a list of form types](#form-types))
+    - examples: "F3", "F24"
   
 Any number of these parameters may be used. However, the FEC's search functionality has some limitations:
 
