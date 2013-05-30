@@ -12,7 +12,7 @@ Because the Fech-Search plugin calls the require method for Fech, you need only 
 
 Begin searching for filings by creating a Fech::Search object with the desired parameters. For example:
 
-    >> Fech::Search.new(:committee_id => "C00410118")
+    search = Fech::Search.new(:committee_id => "C00410118")
 
 The following search parameters are available:
 
@@ -41,8 +41,7 @@ An ArgumentError will be raised if either of these is violated with Fech::Search
 
 A list of filings matching the search parameters may then be a accessed with Search#results:
 
-    >> search = Fech::Search.new(:committee_id => "C00410118")
-    >> results = search.results
+    results = search.results
 
 Each SearchResult object includes basic data about the filing:
   
