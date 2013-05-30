@@ -20,10 +20,10 @@ The following search parameters are available:
 - :committee_name
 - :state
 - :party
-- :committee_type ([See a list of types](http://www.fec.gov/finance/disclosure/metadata/CommitteeTypeCodes.shtml))
-- :report_type
+- :committee_type ([See a list of committee types](http://www.fec.gov/finance/disclosure/metadata/CommitteeTypeCodes.shtml))
+- :report_type ([See a list of report types](http://www.fec.gov/finance/disclosure/metadata/ReportTypeCodes.shtml))
 - :date
-- :form_type
+- :form_type ([See below for a list of form types](#form-types))
   
 Any number of these parameters may be used. However, the FEC's search functionality has some limitations:
 
@@ -78,6 +78,26 @@ To initialize the filing with parameters, pass them as arguments to the SearchRe
 
 See the [Fech documentation](http://nytimes.github.io/Fech/) for more on initialization options.
 
+
+#### Form types
+
+- F1: STATEMENT OF ORGANIZATION
+- F1M: NOTIFICATION OF MULTICANDIDATE STATUS
+- F2: STATEMENT OF CANDIDACY
+- F24: 24/48 HOUR NOTICE OF INDEPENDENT EXPENDITURES OR COORDINATED EXPENDITURES
+- F3: RPT OF RECEIPTS AND DISBURSEMENTS - AUTHORIZED CMTE
+- F3P: RPT OF RECEIPTS AND DISBURSEMENTS - AUTHORIZED CMTE (PRES/VICE PRES)
+- F3X: RPT OF RECEIPTS AND DISBURSEMENTS - NON-AUTHORIZED CMTE
+- F3L: RPT OF CONTRIBUTIONS BUNDLED BY LOBBYIST/REGISTRANTS AND LOBBYIST/REGISTRANT PACS
+- F4: RPT OF RECEIPTS AND DISBURSEMENTS - CONVENTION CMTE
+- F5: RPT OF INDEPENDENT EXPENDITURES MADE AND CONTRIBUTIONS RECEIVED
+- F6: 48-HOUR NOTICE OF CONTRIBUTIONS/LOANS RECEIVED
+- F7: RPT OF COMMUNICATION COSTS - CORPORATIONS AND MEMBERSHIP ORGS
+- F8: DEBT SETTLEMENT PLAN
+- F9: 24-HOUR NOTICE OF DISBURSEMENT/OBLIGATIONS FOR ELECTIONEERING COMMUNICATIONS
+- F10: 24-HOUR NOTICE OF EXPENDITURE FROM CANDIDATE'S PERSONAL FUNDS
+- F13: RPT OF DONATIONS ACCEPTED FOR INAUGURAL COMMITTEE
+- F99: MISCELLANEOUS SUBMISSION
 
 ## Installation
 
