@@ -30,6 +30,8 @@ Any number of these parameters may be used. However, the FEC's search functional
 - All other parameters are ignored when :committee_id is used.
 - :form_type cannot be used by itself; another parameter must be used with it.
 
+An ArgumentError will be raised if either of these is violated with Fech::Search.new.
+
 A list of filings matching the search parameters may then be a accessed with Search#results:
 
     >> search = Fech::Search.new(:committee_id => "C00410118")
