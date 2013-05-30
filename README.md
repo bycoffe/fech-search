@@ -6,6 +6,45 @@ Fech-Search is essentially a Ruby wrapper around the [electronic filing search f
 
 ## Usage
 
+### Example
+
+    require 'fech-search'
+
+Perform a search for form F3P filings (report of receipts and disbursements) submitted by Romney for President:
+
+    search = Fech::Search.new(:committee_name => "Romney for President", :form_type => "F3P")
+
+Access the results of the search:
+
+    results = search.results
+    results.size
+    => 100
+
+Remove any filings that have been amended:
+
+    results.select! { |result| result.amended_by.nil? }
+    results.size
+    => 41
+
+Limit to filings covering the last six months of 2012:
+
+    results.select! { |x| x.period[:from] >= Date.new(2012, 7, 1) && x.period[:to] <= Date.new(2012, 12, 31) }
+    results.size
+    => 6
+
+Create a `Fech::Filing` object from one of the results and download the filing data:
+
+    filing = results.first.filing.download
+
+Access information from the filing:
+
+    filing.summary[:col_a_total_receipts]
+    => "4747984.49"
+
+    filing.summary[:col_b_total_receipts]
+    => "10617838.18"
+
+
 Because Fech-Search requires Fech, you need only require 'fech-search' to use both:
 
     require 'fech-search'
