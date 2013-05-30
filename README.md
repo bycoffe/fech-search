@@ -39,6 +39,8 @@ Any number of these parameters may be used. However, the FEC's search functional
 
 An ArgumentError will be raised if either of these is violated with Fech::Search.new.
 
+Also note that overly broad searches can be slow, so you should make your search as specific as possible.
+
 A list of filings matching the search parameters may then be a accessed with Search#results:
 
     results = search.results
