@@ -34,7 +34,7 @@ module Fech
     # The Fech filing object for this search result
     # @return [Fech::Filing]
     def filing(opts={})
-      @filing ||= Fech::Filing.new(self.filing_id, opts)
+      Fech::Filing.new(self.filing_id, opts)
     end
   end
 
