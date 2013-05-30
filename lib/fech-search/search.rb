@@ -77,6 +77,7 @@ module Fech
       parsed_results = []
       regex = /<DT>(.*?)<P/m
       match = body.match regex
+      return [] if match.nil?
       content = match[1]
       committee_sections = content.split(/<DT>/)
       committee_sections.each do |section|
