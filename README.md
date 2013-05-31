@@ -14,11 +14,25 @@ Perform a search for form F3P filings (report of receipts and disbursements) sub
 
     search = Fech::Search.new(:committee_name => "Romney for President", :form_type => "F3P")
 
-Access the results of the search:
+The search is performed when `Fech::Search.new` is called. You can then access the results of the search with `search.results`, which is simply an array of `Fech::SearchResult` objects:
 
     results = search.results
     results.size
     => 100
+
+Each `Fech::SearchResult` object has the following attributes:
+
+- amended_by
+- committee_id
+- committee_name
+- date_filed
+- date_format
+- description
+- filing_id
+- form_type
+- period
+
+You can now work with the results as you would any Ruby array.
 
 Remove any filings that have been amended:
 
@@ -36,7 +50,13 @@ Create a `Fech::Filing` object from one of the results and download the filing d
 
     filing = results.first.filing.download
 
-Access information from the filing:
+You now have access to the same filing object and methods as if you had created it directly with [Fech](http://nytimes.github.io/Fech/).
+
+To initialize the `Fech::Filing` object with parameters, pass them as arguments to the `SearchResult#filing` method:
+
+    filing = results.first.filing(:csv_parser => Fech::CsvDoctor)
+
+Get information from the filing:
 
     filing.summary[:col_a_total_receipts]
     => "4747984.49"
@@ -44,107 +64,34 @@ Access information from the filing:
     filing.summary[:col_b_total_receipts]
     => "10617838.18"
 
-
-Because Fech-Search requires Fech, you need only require 'fech-search' to use both:
-
-    require 'fech-search'
-
-Begin searching for filings by creating a Fech::Search object with the desired parameters. For example:
-
-    search = Fech::Search.new(:committee_id => "C00410118")
+### Search parameters
 
 The following search parameters are available:
 
-- __:committee_id__ (The nine-character committee ID assigned by the FEC)
+- `:committee_id` (The nine-character committee ID assigned by the FEC)
     - examples: "C00499202", "C00130187"
-- __:committee_name__
+- `:committee_name`
     - examples: "Restore Our Future", "Obama for America"
-- __:state__ (Two-character state abbreviation)
+- `:state` (Two-character state abbreviation)
     - examples: "MA", "FL"
-- __:party__ (Three-character party abbreviation)
+- `:party` (Three-character party abbreviation)
     - examples: "REP", "DEM"
-- __:committee_type__ (One-character committee type. [See a list of committee types](http://www.fec.gov/finance/disclosure/metadata/CommitteeTypeCodes.shtml))
+- `:committee_type` (One-character committee type. [See a list of committee types](http://www.fec.gov/finance/disclosure/metadata/CommitteeTypeCodes.shtml))
     - examples: "H", "P"
-- __:report_type__ ([See a list of report types](http://www.fec.gov/finance/disclosure/metadata/ReportTypeCodes.shtml))
+- `:report_type` ([See a list of report types](http://www.fec.gov/finance/disclosure/metadata/ReportTypeCodes.shtml))
     - examples: "M4", "Q1"
-- __:date__ (A Ruby Date object)
-- __:form_type__ ([See below for a list of form types](#form-types))
+- `:date` (A Ruby Date object)
+- `:form_type` ([See the FEC's electronic filing search for a list of form types](http://www.fec.gov/finance/disclosure/efile_search.shtml))
     - examples: "F3", "F24"
   
 Any number of these parameters may be used. However, the FEC's search functionality has some limitations:
 
-- All other parameters are ignored when :committee_id is used.
-- :form_type cannot be used by itself; another parameter must be used with it.
+- All other parameters are ignored when `:committee_id` is used.
+- `:form_type` cannot be used by itself; another parameter must be used with it.
 
-An ArgumentError will be raised if either of these is violated with Fech::Search.new.
+An `ArgumentError` will be raised if either of these is violated with `Fech::Search.new`.
 
-Also note that overly broad searches can be slow, so you should make your search as specific as possible.
-
-A list of filings matching the search parameters may then be a accessed with Search#results:
-
-    results = search.results
-
-Each SearchResult object includes basic data about the filing:
-  
-    >> results[0]
-    #<Fech::SearchResult:0x000001028a59f0
-    @amended_by=nil,
-    @committee_id="C00410118",
-    @committee_name="BACHMANN FOR CONGRESS",
-    @date_filed=#<Date: 2013-05-29 (4912883/2,0,2299161)>,
-    @date_format="%m/%d/%Y",
-    @description="YEAR-END",
-    @filing_id="872805",
-    @form_type="F3A",
-    @period=
-    {:from=>%<8b0f7347Date: 2012-11-27 (4912517/2,0,2299161)>,
-     :to=>#<Date: 2012-12-31 (4912585/2,0,2299161)>}>
-
-To access the Fech::Filing object for a search result, just call SearchResult#filing:
-
-    >> filing = results[0].filing
-    #<Fech::Filing:0x00000101777e58
-    @csv_parser=Fech::Csv,
-    @customized=false,
-    @download_dir="/var/folders/Sz/SzmbeiAqFvqD8BYScDKkGE+++TI/-Tmp-",
-    @encoding="iso-8859-1:utf-8",
-    @filing_id="872805",
-    @quote_char="\"",
-    @resaved=false,
-    @translator=
-      #<Fech::Translator:0x00000101777bd8
-       @aliases=[],
-       @cache={},
-       @translations=[]>>
-
-You now have access to the same filing object and methods as if you had created it directly through [Fech](http://nytimes.github.io/Fech/).
-
-To initialize the filing with parameters, pass them as arguments to the SearchResult#filing method:
-  
-    >> filing = results[0].filing(:csv_parser => Fech::CsvDoctor)
-
-See the [Fech documentation](http://nytimes.github.io/Fech/) for more on initialization options.
-
-
-#### Form types
-
-- F1: STATEMENT OF ORGANIZATION
-- F1M: NOTIFICATION OF MULTICANDIDATE STATUS
-- F2: STATEMENT OF CANDIDACY
-- F24: 24/48 HOUR NOTICE OF INDEPENDENT EXPENDITURES OR COORDINATED EXPENDITURES
-- F3: RPT OF RECEIPTS AND DISBURSEMENTS - AUTHORIZED CMTE
-- F3P: RPT OF RECEIPTS AND DISBURSEMENTS - AUTHORIZED CMTE (PRES/VICE PRES)
-- F3X: RPT OF RECEIPTS AND DISBURSEMENTS - NON-AUTHORIZED CMTE
-- F3L: RPT OF CONTRIBUTIONS BUNDLED BY LOBBYIST/REGISTRANTS AND LOBBYIST/REGISTRANT PACS
-- F4: RPT OF RECEIPTS AND DISBURSEMENTS - CONVENTION CMTE
-- F5: RPT OF INDEPENDENT EXPENDITURES MADE AND CONTRIBUTIONS RECEIVED
-- F6: 48-HOUR NOTICE OF CONTRIBUTIONS/LOANS RECEIVED
-- F7: RPT OF COMMUNICATION COSTS - CORPORATIONS AND MEMBERSHIP ORGS
-- F8: DEBT SETTLEMENT PLAN
-- F9: 24-HOUR NOTICE OF DISBURSEMENT/OBLIGATIONS FOR ELECTIONEERING COMMUNICATIONS
-- F10: 24-HOUR NOTICE OF EXPENDITURE FROM CANDIDATE'S PERSONAL FUNDS
-- F13: RPT OF DONATIONS ACCEPTED FOR INAUGURAL COMMITTEE
-- F99: MISCELLANEOUS SUBMISSION
+__Note:__ Overly broad searches can be slow, so you should make your search as specific as possible.
 
 ## Installation
 
@@ -167,6 +114,10 @@ Or install it yourself as:
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Authors
+
+- Aaron Bycoffe, bycoffe@huffingtonpost.com
 
 ## Copyright
 
