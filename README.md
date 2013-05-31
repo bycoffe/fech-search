@@ -36,13 +36,13 @@ You can now work with the results as you would any Ruby array.
 
 Remove any filings that have been amended:
 
-    results.select! { |result| result.amended_by.nil? }
+    results.select! { |r| r.amended_by.nil? }
     results.size
     => 41
 
 Limit to filings covering the last six months of 2012:
 
-    results.select! { |x| x.period[:from] >= Date.new(2012, 7, 1) && x.period[:to] <= Date.new(2012, 12, 31) }
+    results.select! { |r| r.period[:from] >= Date.new(2012, 7, 1) && r.period[:to] <= Date.new(2012, 12, 31) }
     results.size
     => 6
 
