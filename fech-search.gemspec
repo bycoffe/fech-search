@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Fech::Search::VERSION
 
-  gem.add_dependency "fech", "~> 1.4.1"
+  gem.add_dependency "fech", "~> 1.6.2"
 
   gem.add_development_dependency "rspec", "~> 2.13.0"
 end
