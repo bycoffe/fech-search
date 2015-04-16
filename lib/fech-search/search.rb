@@ -1,4 +1,5 @@
 require 'net/http'
+require 'nokogiri'
 
 module Fech
 
@@ -11,6 +12,7 @@ module Fech
     def initialize(search_params={})
       @search_params = validate_params(make_params(search_params))
       @search_url = 'http://query.nictusa.com/cgi-bin/dcdev/forms/'
+      @search_url = 'http://docquery.fec.gov/cgi-bin/forms/'
       @response = search
     end
 
@@ -63,28 +65,21 @@ module Fech
     # results if called directly, or will yield the results one
     # by one if a block is passed.
     def results(&block)
-      if @search_params['date'] != ''
-        results_from_date_search(&block)
-      else
-        results_from_nondate_search(&block)
-      end
-    end
-
-    # Parse the results from a search that does not include a date.
-    # Will return an array of results if called directly, or will
-    # yield the results one by one if a block is passed.
-    def results_from_nondate_search(&block)
+      lines = body.split("\n")
+      parsing = false
+      committee = nil
       parsed_results = []
-      regex = /<DT>(.*?)<P/m
-      match = body.match regex
-      return [] if match.nil?
-      content = match[1]
-      committee_sections = content.split(/<DT>/)
-      committee_sections.each do |section|
-        data = parse_committee_section(section)
-        data.each do |result|
-          search_result = SearchResult.new(result)
-
+      lines.each do |line|
+        if line.match(/^<TABLE style='border:0;'>$/)
+          parsing = true
+        end
+        next unless parsing
+        if line.match(/<td colspan='8'>/)
+          committee = parse_committee_line(line)
+        end
+        if line.match(/>FEC-\d+</)
+          merged = parse_filing_line(line).merge(committee)
+          search_result = SearchResult.new(merged)
           if block_given?
             yield search_result
           else
@@ -92,93 +87,21 @@ module Fech
           end
         end
       end
-      block_given? ? nil : parsed_results
+      parsed_results
     end
 
-    # For results of a search that does not include a date, parse
-    # the section giving information on the committee that submitted
-    # the filing.
-    # @param [String] section
-    def parse_committee_section(section)
-      data = []
-      section.gsub!(/^<BR>/, '')
-      rows = section.split(/\n/)
-      committee_data = parse_committee_row(rows.first)
-      rows[1..-1].each do |row|
-        data << committee_data.merge(parse_filing_row(row))
-      end
-      data
+    # Parse a line that contains committee information
+    def parse_committee_line(line)
+      match = line.match(/<A.*?>(?<name>.*?) - (?<id>C\d{8})<\/A/)
+      {:committee_name => match['name'], :committee_id => match['id']}
     end
 
-    # Parse the results from a search that includes a date.
-    # Will return an array of results if called directly, or will
-    # yield the results one by one if a block is passed.
-    def results_from_date_search(&block)
-      parsed_results = []
-      dl = body.match(/<DL>(.*?)<BR><P/m)[0]
-      rows = dl.split('<DT>')[1..-1].map { |row| row.split("\n") }
-      rows.each do |committee, *filings|
-        committee = parse_committee_row(committee)
-        filings.each do |filing|
-          next if filing == "<BR><P"
-          data = committee.merge(parse_filing_row(filing))
-          search_result = SearchResult.new(data)
-          if block_given?
-            yield search_result
-          else
-            parsed_results << search_result
-          end
-        end
-      end
-      block_given? ? nil : parsed_results
-    end
-
-    # For results of a search that includes a date, parse
-    # the portion of the results with information on the
-    # committee that submitted the filing.
-    # @param [String] row
-    # @return [Hash] the committee name and ID
-    def parse_committee_row(row)
-      regex = /
-              '>
-              (.*?)
-              \s-\s
-              (C\d{8})
-              /x
-      match = row.match regex
-      {:committee_name => match[1], :committee_id => match[2]}
-    end
-
-    # Parse a result row with information on the filing itself.
-    # @param [String] row
-    # @return [Hash] the filing ID, form type, period, date filed, description
-    # and, optionally, the filing that amended this filing.
-    def parse_filing_row(row)
-      regex = /
-              FEC-(\d+)
-              \s
-              Form
-              \s
-              (F.*?)
-              \s\s-\s
-              (period\s([-\/\d]+),\s)?
-              filed
-              \s
-              ([\/\d]+)
-              \s
-              (-\s
-               (.*?)
-               ($|<BR>.*?FEC-(\d+))
-              )?
-              /x
-      match = row.match regex
-      {:filing_id => match[1],
-       :form_type => match[2],
-       :period => match[4],
-       :date_filed => match[5],
-       :description => match[7],
-       :amended_by => match[9]
-      }
+    # Parse a line that contains a filing
+    def parse_filing_line(line)
+      doc = Nokogiri::HTML(line)
+      cells = doc.css("td").map(&:text)
+      fields = [:form_type, :filing_id, :amended_by, :from, :to, :date_filed, :description]
+      Hash[fields.zip(cells)]
     end
 
   end
