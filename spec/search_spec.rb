@@ -17,11 +17,11 @@ describe Fech::Search do
     end
 
     it "should not raise an error if :committee_id is given by itself" do
-      expect { Fech::Search.new(:committee_id => "C00431171") }.to_not raise_error(ArgumentError)
+      expect { Fech::Search.new(:committee_id => "C00431171") }.to_not raise_error
     end
 
     it "should not raise an error if :form_type is given with another parameter" do
-      expect { Fech::Search.new(:form_type => "F3", :date => Date.new(2013, 5, 29)) }.to_not raise_error(ArgumentError)
+      expect { Fech::Search.new(:form_type => "F3", :date => Date.new(2013, 5, 29)) }.to_not raise_error
     end
 
   end
@@ -30,20 +30,20 @@ describe Fech::Search do
 
     it "should return an array of results from committee search" do
       search = Fech::Search.new(:committee_id => "C00431171")
-      search.results.class.should == Array
-      search.results[0].class.should == Fech::SearchResult
+      expect(search.results.class).to eq(Array)
+      expect(search.results[0].class).to eq(Fech::SearchResult)
     end
 
     it "should return an array of results from date search" do
       search = Fech::Search.new(:date => Date.new(2013, 5, 29))
-      search.results.class.should == Array
-      search.results[0].class.should == Fech::SearchResult
+      expect(search.results.class).to eq(Array)
+      expect(search.results[0].class).to eq(Fech::SearchResult)
     end
 
     it "should return an array of results from date and report_type search" do
       search = Fech::Search.new(:date => Date.new(2013, 5, 29), :report_type => "M4")
-      search.results.class.should == Array
-      search.results[0].class.should == Fech::SearchResult
+      expect(search.results.class).to eq(Array)
+      expect(search.results[0].class).to eq(Fech::SearchResult)
     end
 
   end

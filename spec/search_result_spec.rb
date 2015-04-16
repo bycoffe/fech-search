@@ -15,10 +15,10 @@ describe Fech::SearchResult do
 
     it "should have valid dates for period" do
       from = @committee_result.period[:from]
-      from.class.should == Date
+      expect(from.class).to eq(Date)
       to = @committee_result.period[:to]
-      to.class.should == Date
-      to.should >= from
+      expect(to.class).to eq(Date)
+      expect(to).to be >= from
     end
 
   end
@@ -26,18 +26,18 @@ describe Fech::SearchResult do
   context "filing" do
 
     it "should make filing accessible" do
-      @date_result.filing.class.should == Fech::Filing
-      @committee_result.filing.class.should == Fech::Filing
+      expect(@date_result.filing.class).to eq(Fech::Filing)
+      expect(@committee_result.filing.class).to eq(Fech::Filing)
     end
 
     it "should create filing object for correct filing" do
       filing = @committee_result.filing
-      filing.filing_id.should == @committee_result.filing_id
+      expect(filing.filing_id).to eq(@committee_result.filing_id)
     end
 
     it "should pass arguments to Fech::Filing#new" do
       filing = @date_result.filing(:download_dir => "/tmp")
-      filing.download_dir.should == "/tmp"
+      expect(filing.download_dir).to eq("/tmp")
     end
 
   end
