@@ -118,6 +118,7 @@ Or install it yourself as:
 ## Authors
 
 - Aaron Bycoffe, bycoffe@huffingtonpost.com
+- Derek Willis, dwillis@gmail.com
 
 ## Copyright
 
