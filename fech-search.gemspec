@@ -3,7 +3,7 @@ require File.expand_path('../lib/fech-search/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Aaron Bycoffe"]
-  gem.email         = ["bycoffe@huffingtonpost.com"]
+  gem.email         = ["bycoffe@gmail.com"]
   gem.description   = %q{A Fech plugin for searching electronic FEC filings}
   gem.summary       = %q{Fech-Search provides an interface for searching for electronic filings submitted to the FEC, and accessing the data in those filings using Fech}
   gem.homepage      = ""
