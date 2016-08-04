@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.version       = Fech::Search::VERSION
 
   gem.add_dependency "fech", "~> 1.8"
-  gem.add_dependency "nokogiri", "1.6.6.2"
+  gem.add_dependency "nokogiri", "~> 1.6"
 
   gem.add_development_dependency "rspec", "~> 2.13.0"
 end
