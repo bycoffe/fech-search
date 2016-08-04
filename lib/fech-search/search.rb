@@ -93,7 +93,7 @@ module Fech
     # Parse a line that contains committee information
     def parse_committee_line(line)
       match = line.match(/<A.*?>(?<name>.*?) - (?<id>C\d{8})<\/A/)
-      {:committee_name => match['name'], :committee_id => match['id']}
+      {committee_name: match['name'], committee_id: match['id']}
     end
 
     # Parse a line that contains a filing
@@ -107,4 +107,3 @@ module Fech
   end
 
 end
-

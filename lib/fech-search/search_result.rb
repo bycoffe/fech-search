@@ -3,7 +3,7 @@ module Fech
   # Fech:SearchResult is a class representing a search result
   # from Fech::Search.
   class SearchResult
-    attr_reader :committee_name, :committee_id, :filing_id, :form_type, :period, :date_filed, :description, :amended_by
+    attr_reader :committee_name, :committee_id, :filing_id, :form_type, :period, :date_filed, :description, :amended_by, :amendment
 
     # @param [Hash] attrs The attributes of the search result.
     def initialize(attrs)
@@ -15,8 +15,9 @@ module Fech
       @form_type      = attrs[:form_type]
       @period         = parse_period(attrs[:from], attrs[:to])
       @date_filed     = Date.strptime(attrs[:date_filed], @date_format)
-      @description    = attrs[:description]
+      @description    = parse_description(attrs)
       @amended_by     = attrs[:amended_by]
+      @amendment      = parse_form_type(attrs[:form_type])
     end
 
     # Parse the strings representing a filing period.
@@ -27,7 +28,34 @@ module Fech
       return unless valid_date(from.to_s) && valid_date(to.to_s)
       from = Date.strptime(from, @date_format)
       to = Date.strptime(to, @date_format)
-      {:from => from, :to => to}
+      {from: from, to: to}
+    end
+
+    def parse_description(attrs)
+      if attrs[:form_type] == 'F1A' or attrs[:form_type] == 'F1N'
+        description = 'STATEMENT OF ORGANIZATION'
+      elsif attrs[:form_type] == 'F2A' or attrs[:form_type] == 'F2N'
+        description = "STATEMENT OF CANDIDACY"
+      elsif attrs[:form_type] == 'F5A' or attrs[:form_type] == 'F5N'
+        description = "REPORT OF INDEPENDENT EXPENDITURES MADE"
+      elsif attrs[:form_type] == 'F1M'
+        description = "NOTIFICATION OF MULTICANDIDATE STATUS"
+      elsif attrs[:form_type] == 'F13'
+        description = "INAUGURAL COMMITTEE DONATIONS"
+      else
+        description = attrs[:description].strip
+      end
+      description
+    end
+
+    # Checks form_type to see if a filing is an amendment
+    # and returns a boolean.
+    def parse_form_type(form_type)
+      if form_type.end_with?('A')
+        true
+      else
+        false
+      end
     end
 
     # Check whether a date string is valid
