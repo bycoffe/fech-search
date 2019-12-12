@@ -12,7 +12,7 @@ module Fech
     def initialize(search_params={})
       @search_params = validate_params(make_params(search_params))
       @search_url = 'http://query.nictusa.com/cgi-bin/dcdev/forms/'
-      @search_url = 'http://docquery.fec.gov/cgi-bin/forms/'
+      @search_url = 'https://docquery.fec.gov/cgi-bin/forms/'
       @response = search
     end
 
@@ -43,6 +43,7 @@ module Fech
     # Performs the search of the FEC's electronic filing database.
     def search
       http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
       http.read_timeout = 5000
       request = Net::HTTP::Post.new(uri.request_uri)
       request.set_form_data(@search_params)
